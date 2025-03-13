@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <title>Chunks of Bytecode &middot; Crafting Interpreters</title>
+
+    <!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <!-- Oh, God, Source Code Pro is so beautiful it makes me want to cry. -->
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400|Source+Sans+Pro:300,400,600'
+        rel='stylesheet' type='text/css'>
+
+    <link rel="icon" type="image/png" href="image/favicon.png" />
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Google analytics -->
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-42804721-2', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+</head>
+
+<body id="top">
+
+    <!-- <div class="scrim"></div> -->
+    <nav class="wide">
+        <a href="/"><img src="image/logotype.png" title="Crafting Interpreters"></a>
+        <div class="contents">
+            <h3><a href="#top">Chunks of Bytecode<small>14</small></a></h3>
+
+            <ul>
+                <li><a href="#bytecode"><small>14.1</small> Bytecode?</a></li>
+                <li><a href="#getting-started"><small>14.2</small> Getting Started</a></li>
+                <li><a href="#chunks-of-instructions"><small>14.3</small> Chunks of Instructions</a></li>
+                <li><a href="#disassembling-chunks"><small>14.4</small> Disassembling Chunks</a></li>
+                <li><a href="#constants"><small>14.5</small> Constants</a></li>
+                <li><a href="#line-information"><small>14.6</small> Line Information</a></li>
+                <li class="divider"></li>
+                <li class="end-part"><a href="#challenges">Challenges</a></li>
+                <li class="end-part"><a href="#design-note"><small>note</small>Test Your Language</a></li>
+            </ul>
+
+
+            <div class="prev-next">
+                <a href="a-bytecode-virtual-machine.html" title="A Bytecode Virtual Machine"
+                    class="left">&larr;&nbsp;Previous</a>
+                <a href="a-bytecode-virtual-machine.html" title="A Bytecode Virtual Machine">&uarr;&nbsp;Up</a>
+                <a href="a-virtual-machine.html" title="A Virtual Machine" class="right">Next&nbsp;&rarr;</a>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="narrow">
+        <a href="/"><img src="image/logotype.png" title="Crafting Interpreters"></a>
+        <a href="a-bytecode-virtual-machine.html" title="A Bytecode Virtual Machine" class="prev">←</a>
+        <a href="a-virtual-machine.html" title="A Virtual Machine" class="next">→</a>
+    </nav>
+
+    <div class="page">
+        <div class="nav-wrapper">
+            <nav class="floating">
+                <a href="/"><img src="image/logotype.png" title="Crafting Interpreters"></a>
+                <div class="expandable">
+                    <h3><a href="#top">Chunks of Bytecode<small>14</small></a></h3>
+
+                    <ul>
+                        <li><a href="#bytecode"><small>14.1</small> Bytecode?</a></li>
+                        <li><a href="#getting-started"><small>14.2</small> Getting Started</a></li>
+                        <li><a href="#chunks-of-instructions"><small>14.3</small> Chunks of Instructions</a></li>
+                        <li><a href="#disassembling-chunks"><small>14.4</small> Disassembling Chunks</a></li>
+                        <li><a href="#constants"><small>14.5</small> Constants</a></li>
+                        <li><a href="#line-information"><small>14.6</small> Line Information</a></li>
+                        <li class="divider"></li>
+                        <li class="end-part"><a href="#challenges">Challenges</a></li>
+                        <li class="end-part"><a href="#design-note"><small>note</small>Test Your Language</a></li>
+                    </ul>
+
+
+                    <div class="prev-next">
+                        <a href="a-bytecode-virtual-machine.html" title="A Bytecode Virtual Machine"
+                            class="left">&larr;&nbsp;Previous</a>
+                        <a href="a-bytecode-virtual-machine.html" title="A Bytecode Virtual Machine">&uarr;&nbsp;Up</a>
+                        <a href="a-virtual-machine.html" title="A Virtual Machine" class="right">Next&nbsp;&rarr;</a>
+                    </div>
+                </div>
+                <a id="expand-nav">≡</a>
+            </nav>
+        </div>
+
+        <article class="chapter">
+
+            <div class="number">14</div>
+            <h1>Chunks of Bytecode</h1>
+
+            <blockquote>
+                <p>If you find that you&rsquo;re spending almost all your time on theory, start turning
+                    some attention to practical things; it will improve your theories. If you find
+                    that you&rsquo;re spending almost all your time on practice, start turning some
+                    attention to theoretical things; it will improve your practice.</p>
+                <p><cite>Donald Knuth</cite></p>
+            </blockquote>
+            <p>We already have ourselves a complete implementation of Lox with jlox, so why
+                isn&rsquo;t the book over yet? Part of this is because jlox relies on the <span name="metal">JVM</span>
+                to do lots of things for us. If we want to understand
+                how an interpreter works all the way down to the metal, we need to build those
+                bits and pieces ourselves.</p>
+        </article>
+
+    </div>
+</body>
+
+</html>
