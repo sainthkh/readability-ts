@@ -1,0 +1,12 @@
+
+<div class="codehilite"><pre><code><span class="k">fun</span> <span class="i">fib</span>(<span class="i">n</span>) {
+  <span class="k">if</span> (<span class="i">n</span> &lt; <span class="n">2</span>) <span class="k">return</span> <span class="i">n</span>;
+  <span class="k">return</span> <span class="i">fib</span>(<span class="i">n</span> - <span class="n">1</span>) + <span class="i">fib</span>(<span class="i">n</span> - <span class="n">2</span>);<span name="fib"> </span>
+}
+
+<span class="k">var</span> <span class="i">before</span> = <span class="i">clock</span>();
+<span class="k">print</span> <span class="i">fib</span>(<span class="n">40</span>);
+<span class="k">var</span> <span class="i">after</span> = <span class="i">clock</span>();
+<span class="k">print</span> <span class="i">after</span> - <span class="i">before</span>;
+</code></pre></div>
+    
