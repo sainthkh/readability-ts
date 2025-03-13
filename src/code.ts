@@ -30,7 +30,14 @@ export const extractReadable = (doc: Document, context: string) => {
             pre.appendChild(codeElement);
         })
 
+        // remove footer
         article?.querySelectorAll('footer').forEach(footer => { footer.remove() })
+
+        // add space after <small>
+        article?.querySelectorAll('a small').forEach(small => {
+            const html = small.innerHTML;
+            small.innerHTML = html + ' ';
+        })
     }
 
     return article?.innerHTML;
