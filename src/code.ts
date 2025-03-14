@@ -1,9 +1,29 @@
-export const add = (a: number, b: number) => a + b;
+export interface ReadableParams {
+    doc: Document;
+    hostname: string;
+    resultDir: string;
+}
 
-export const extractReadable = (doc: Document, context: string) => {
+export const extractReadable = (params: ReadableParams) => {
+    const { doc, hostname, resultDir } = params;
+    const title = doc.title.replace(/[/\\?%*:|"<>]/g, '');
+    const images: string[] = [];
     const article = doc.querySelector('article');
 
-    if (context === 'craftinginterpreters.com') {
+    article?.querySelectorAll('img').forEach(img => {
+        const src = img.getAttribute('src');
+        if (src && !src.startsWith('http')) {
+            images.push(src);
+
+            const p = doc.createElement('p');
+            p.innerHTML = `!$[[${resultDir}/${title}/images/${src}]]$`
+
+            img.parentNode?.insertBefore(p, img);
+            img.remove();
+        }
+    })
+
+    if (hostname === 'craftinginterpreters.com') {
         // code block
         article?.querySelectorAll('.codehilite pre').forEach(pre => {
             const codeElement = doc.createElement('code');
@@ -40,5 +60,9 @@ export const extractReadable = (doc: Document, context: string) => {
         })
     }
 
-    return article?.innerHTML;
+    return {
+        readable: article?.innerHTML,
+        title: doc.title,
+        images,
+    }
 }

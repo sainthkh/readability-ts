@@ -1,60 +1,53 @@
-import { add, extractReadable } from './code';
+import { extractReadable } from './code';
 
 import { JSDOM } from 'jsdom';
 import { readFile, writeFile } from 'fs/promises';
 
-test('add', () => {
-    expect(add(1, 2)).toBe(3);
-})
+const tester = (testName: string, caseName: string, hostname: string, generate: boolean) => {
+    const testFn = generate ? test.only : test;
+
+    testFn(testName, async () => {
+        const html = await readFile(`testcases/${hostname}/${caseName}.html`, 'utf-8');
+        const dom = new JSDOM(html);
+        const result = extractReadable({
+            doc: dom.window.document,
+            hostname,
+            resultDir: '0 Reading',
+        });
+
+        const expectedPath = `testcases/${hostname}/${caseName}.expected.html`
+        if (generate) {
+            await writeFile(expectedPath, result.readable!, 'utf-8');
+        } else {
+            const expected = await readFile(expectedPath, 'utf-8');
+            expect(result.readable).toBe(expected);
+        }
+    })
+}
 
 describe('tags', () => {
+    const hostname = 'example.com'
     describe('<article>', () => {
-        test('add correctly', async () => {
-            const html = await readFile('testcases/add-article.html', 'utf-8');
-            const expected = await readFile('testcases/add-article.expected.html', 'utf-8');
-            const dom = new JSDOM(html);
+        const cases = [
+            ['add correctly', 'add-article'],
+        ]
+        cases.forEach(([testName, caseName]) => tester(testName, caseName, hostname, false))
+    })
 
-            const readable = extractReadable(dom.window.document, 'all');
-            // await writeFile('testcases/add-article.actual.html', readable!, 'utf-8');
-
-            expect(readable).toBe(expected);
-        })
+    describe('<img>', () => {
+        tester('src should be absolute', 'image-src', hostname, false)
     })
 })
 
 describe('sites', () => {
     describe('craftinginterpreters.com', () => {
-        test('add code blocks correctly', async () => {
-            const html = await readFile('testcases/craftinginterpreters.com/code-block.html', 'utf-8');
-            const expected = await readFile('testcases/craftinginterpreters.com/code-block.expected.html', 'utf-8');
-            const dom = new JSDOM(html);
+        const hostname = 'craftinginterpreters.com';
+        const cases = [
+            ['add code block', 'code-block'],
+            ['remove footer', 'footer'],
+            ['chapter number: add space after small', 'chapter-number'],
+        ]
 
-            const readable = extractReadable(dom.window.document, 'craftinginterpreters.com');
-            // await writeFile('testcases/craftinginterpreters.com/code-block.actual.html', readable!, 'utf-8');
-
-            expect(readable).toBe(expected);
-        })
-
-        test('remove footer correctly', async () => {
-            const html = await readFile('testcases/craftinginterpreters.com/footer.html', 'utf-8');
-            const expected = await readFile('testcases/craftinginterpreters.com/footer.expected.html', 'utf-8');
-            const dom = new JSDOM(html);
-
-            const readable = extractReadable(dom.window.document, 'craftinginterpreters.com');
-            await writeFile('testcases/craftinginterpreters.com/footer.actual.html', readable!, 'utf-8');
-
-            expect(readable).toBe(expected);
-        })
-
-        test('add space after <small>', async () => {
-            const html = await readFile('testcases/craftinginterpreters.com/chapter-number.html', 'utf-8');
-            // const expected = await readFile('testcases/craftinginterpreters.com/chapter-number.expected.html', 'utf-8');
-            const dom = new JSDOM(html);
-
-            const readable = extractReadable(dom.window.document, 'craftinginterpreters.com');
-            await writeFile('testcases/craftinginterpreters.com/chapter-number.actual.html', readable!, 'utf-8');
-
-            // expect(readable).toBe(expected);
-        })
+        cases.forEach(([testName, caseName]) => tester(testName, caseName, hostname, false))
     })
 })
